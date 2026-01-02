@@ -28,7 +28,14 @@ const AdminDashboard = () => {
   const handleAddLink = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newLink.name || !newLink.url) return;
-    addLink(newLink);
+
+    // Auto-add https:// if missing
+    let formattedUrl = newLink.url.trim();
+    if (!/^https?:\/\//i.test(formattedUrl)) {
+      formattedUrl = `https://${formattedUrl}`;
+    }
+
+    addLink({ ...newLink, url: formattedUrl });
     setNewLink({ name: '', url: '', category: '' });
   };
 
@@ -167,8 +174,8 @@ const AdminDashboard = () => {
                 required
               />
               <Input 
-                placeholder="URL (https://...)" 
-                type="url"
+                placeholder="URL (e.g. authorize.qzz.io)" 
+                type="text"
                 value={newLink.url}
                 onChange={e => setNewLink({...newLink, url: e.target.value})}
                 required
