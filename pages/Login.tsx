@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, Card } from '../components/UI';
@@ -17,6 +17,37 @@ const Login = () => {
       navigate('/admin');
     } else {
       setError('Invalid credentials');
+    }
+  };
+
+  const strengthScore = useMemo(() => {
+    if (!password) return 0;
+    let score = 0;
+    if (password.length > 5) score++;
+    if (password.length > 9) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password) || /[^A-Za-z0-9]/.test(password)) score++;
+    return score;
+  }, [password]);
+
+  const getStrengthColor = () => {
+    switch (strengthScore) {
+      case 1: return 'bg-red-500';
+      case 2: return 'bg-yellow-500';
+      case 3: return 'bg-blue-500';
+      case 4: return 'bg-green-500';
+      default: return 'bg-gray-200';
+    }
+  };
+
+  const getStrengthLabel = () => {
+    switch (strengthScore) {
+      case 0: return '';
+      case 1: return 'Weak';
+      case 2: return 'Fair';
+      case 3: return 'Good';
+      case 4: return 'Strong';
+      default: return '';
     }
   };
 
@@ -57,6 +88,31 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)} 
               required
             />
+            {/* Password Strength Indicator */}
+            {password && (
+              <div className="mt-2 transition-all duration-300 ease-in-out">
+                <div className="flex gap-1 h-1.5 mb-1">
+                  {[1, 2, 3, 4].map((level) => (
+                    <div 
+                      key={level}
+                      className={`flex-1 rounded-full transition-colors duration-300 ${
+                        strengthScore >= level ? getStrengthColor() : 'bg-gray-100'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <div className="flex justify-end">
+                  <span className={`text-xs font-medium transition-colors duration-300 ${
+                    strengthScore === 1 ? 'text-red-500' :
+                    strengthScore === 2 ? 'text-yellow-600' :
+                    strengthScore === 3 ? 'text-blue-600' :
+                    strengthScore === 4 ? 'text-green-600' : 'text-gray-400'
+                  }`}>
+                    {getStrengthLabel()}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           <Button type="submit" className="w-full justify-center">
