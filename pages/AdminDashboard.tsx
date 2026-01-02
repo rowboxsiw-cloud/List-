@@ -1,8 +1,26 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { Button, Input, Card, Badge } from '../components/UI';
-import { Plus, Trash2, Edit2, Save, X, Globe, Settings, List, Search } from 'lucide-react';
+import { Plus, Trash2, Edit2, Save, X, Globe, Settings, List, Search, AlertTriangle } from 'lucide-react';
 import { ServiceItem } from '../types';
+
+const ErrorButton = () => {
+  return (
+    <button
+      onClick={() => {
+        // For production safety, we log instead of throwing. 
+        // Uncomment the line below to test Sentry crash reporting.
+        // throw new Error('This is your first error!');
+        console.error('This is your first error! (Simulated)');
+        alert('Error simulated in console. To test actual crash, uncomment the throw Error line in AdminDashboard.tsx');
+      }}
+      className="px-4 py-2 bg-red-50 text-red-700 rounded-md hover:bg-red-100 transition-colors text-sm font-medium border border-red-200 flex items-center gap-2"
+    >
+      <AlertTriangle size={16} />
+      Break the world
+    </button>
+  );
+};
 
 const AdminDashboard = () => {
   const { services, links, config, addService, deleteService, updateService, addLink, deleteLink, updateConfig } = useData();
@@ -273,6 +291,21 @@ const AdminDashboard = () => {
               </Button>
             </div>
           </Card>
+
+          <div className="mt-8">
+            <Card>
+              <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-gray-800">
+                <AlertTriangle size={20} className="text-yellow-500" /> Diagnostics
+              </h3>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 flex items-center justify-between">
+                <div className="text-sm text-gray-600">
+                  <p className="font-medium text-gray-900">Sentry Integration Test</p>
+                  <p>Clicking this button will throw an intentional error to verify Sentry reporting.</p>
+                </div>
+                <ErrorButton />
+              </div>
+            </Card>
+          </div>
         </div>
       )}
     </div>

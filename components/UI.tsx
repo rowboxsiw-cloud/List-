@@ -52,3 +52,23 @@ export const LoadingSpinner = () => (
     <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
   </div>
 );
+
+export const PageLoader = () => (
+  <div className="fixed inset-0 z-50 bg-gray-50 flex flex-col">
+    {/* Indeterminate Progress Bar */}
+    <div className="h-1 w-full bg-brand-100 overflow-hidden">
+      <div className="h-full bg-brand-600 w-full origin-left animate-indeterminate-bar"></div>
+    </div>
+    
+    {/* Centered Loading State */}
+    <div className="flex-grow flex flex-col items-center justify-center pb-20">
+      <div className="relative">
+        <div className="absolute inset-0 bg-brand-200 rounded-full animate-ping opacity-20"></div>
+        <Loader2 className="w-12 h-12 animate-spin text-brand-600 relative z-10" />
+      </div>
+      <p className="mt-4 text-brand-900 font-medium text-sm tracking-wide animate-pulse">
+        LOADING...
+      </p>
+    </div>
+  </div>
+);

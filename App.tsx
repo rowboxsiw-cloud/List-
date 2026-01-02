@@ -3,7 +3,7 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import { PublicLayout, AdminLayout, ProtectedRoute } from './components/Layout';
-import { LoadingSpinner } from './components/UI';
+import { PageLoader } from './components/UI';
 import * as Sentry from "@sentry/react";
 
 // Lazy loading pages for performance
@@ -30,7 +30,7 @@ const App = () => {
       <AuthProvider>
         <DataProvider>
           <HashRouter>
-            <Suspense fallback={<div className="h-screen flex items-center justify-center"><LoadingSpinner /></div>}>
+            <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<PublicLayout />}>

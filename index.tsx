@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import * as Sentry from "@sentry/react";
 
-// Initialize Sentry
-// Note: In a real production build, use process.env.VITE_SENTRY_DSN
+// Initialize Sentry with the specific DSN provided
 Sentry.init({
-  dsn: process.env.VITE_SENTRY_DSN || "", // Fail-safe if env not provided
+  dsn: "https://b8659089b3a614992b220e49dd829c93@o4510641558978560.ingest.us.sentry.io/4510641561141248",
   integrations: [
     Sentry.browserTracingIntegration(),
     Sentry.replayIntegration(),
@@ -16,7 +15,9 @@ Sentry.init({
   // Session Replay
   replaysSessionSampleRate: 0.1, 
   replaysOnErrorSampleRate: 1.0,
-  enabled: process.env.NODE_ENV === 'production' && !!process.env.VITE_SENTRY_DSN
+  // Setting this option to true will send default PII data to Sentry.
+  // For example, automatic IP address collection on events
+  sendDefaultPii: true
 });
 
 const rootElement = document.getElementById('root');
